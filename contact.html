@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskSpin – Contact</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body>
+  <!-- Navbar (shared) -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">TaskSpin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Input Tasks</a></li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Spinner</a></li>
+          <li class="nav-item"><a class="nav-link active" href="contact.html">Selected Task</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Selected Task Page -->
+  <section class="section-padding hero-gradient text-light">
+    <div class="container">
+      <h1 class="fw-bold mb-3">Selected Task</h1>
+      <p class="lead">Basic view. Mark done or return to pool.</p>
+      <div id="selectedWrapper" class="card bg-dark bg-opacity-50 border-0" aria-live="polite" role="region">
+        <div class="card-body">
+          <h3 id="selectedTitle" class="card-title">None Selected Yet</h3>
+          <p id="selectedMeta" class="small text-light"></p>
+          <p id="selectedNotes" class="small"></p>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button id="markDone" class="btn btn-success btn-sm" disabled data-bs-toggle="modal" data-bs-target="#confirmDoneModal">Done</button>
+            <button id="returnPool" class="btn btn-outline-light btn-sm" disabled>Return</button>
+            <button class="btn btn-outline-light btn-sm" onclick="location.href='features.html'">Spin</button>
+            <button class="btn btn-outline-light btn-sm" onclick="location.href='index.html'">Tasks</button>
+          </div>
+          <div id="selectedFeedback" class="mt-3 small" aria-live="polite" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmDoneModal" tabindex="-1" aria-labelledby="confirmDoneLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="confirmDoneLabel">Mark Task Done?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="confirmDoneBody">Confirm completion of the selected task.</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="confirmDoneAction" class="btn btn-success">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Removed recent completions list for basic version -->
+
+  <!-- Footer -->
+  <footer class="footer-bg pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <h5>TaskSpin</h5>
+          <p class="small">Finalize and execute your selected task.</p>
+        </div>
+        <div class="col-md-3">
+          <h6>Flow</h6>
+          <ul class="list-unstyled small"><li>Input</li><li>Spin</li><li>Execute</li></ul>
+        </div>
+        <div class="col-md-3">
+          <h6>Pages</h6>
+          <ul class="list-unstyled small">
+            <li><a href="index.html">Input</a></li>
+            <li><a href="features.html">Spinner</a></li>
+            <li><a href="contact.html">Selected</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center mt-4 small">&copy; <span id="year"></span> TaskSpin</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    const SELECTED_KEY='taskspin_selected';
+    const TASKS_KEY='taskspin_tasks';
+    const DONE_KEY='taskspin_done';
+    function loadSelected(){ try{return JSON.parse(localStorage.getItem(SELECTED_KEY));}catch{return null;} }
+    function loadTasks(){ try{return JSON.parse(localStorage.getItem(TASKS_KEY))||[];}catch{return [];} }
+    function saveTasks(t){ localStorage.setItem(TASKS_KEY, JSON.stringify(t)); }
+    function loadDone(){ try{return JSON.parse(localStorage.getItem(DONE_KEY))||[];}catch{return [];} }
+    function saveDone(d){ localStorage.setItem(DONE_KEY, JSON.stringify(d)); }
+    function renderSelected(){
+      const sel=loadSelected();
+      const titleEl=document.getElementById('selectedTitle');
+      const metaEl=document.getElementById('selectedMeta');
+      const notesEl=document.getElementById('selectedNotes');
+      const doneBtn=document.getElementById('markDone');
+      const returnBtn=document.getElementById('returnPool');
+      if(!sel){
+        titleEl.textContent='None Selected Yet';
+        metaEl.textContent='Spin a task to populate.';
+        notesEl.textContent='';
+        doneBtn.disabled=true; returnBtn.disabled=true;
+      } else {
+        titleEl.textContent=sel.title;
+        metaEl.textContent='You are doing this.';
+        notesEl.textContent= sel.notes? sel.notes : 'No notes.';
+        doneBtn.disabled=false; returnBtn.disabled=false;
+      }
+    }
+    function renderDone(){ /* basic version omits list */ }
+    document.getElementById('confirmDoneAction').addEventListener('click', ()=>{
+      const sel=loadSelected(); if(!sel) return;
+      const done=loadDone(); done.push({ title: sel.title, completed: Date.now() }); saveDone(done);
+      const tasks=loadTasks(); const idx=tasks.findIndex(t=> t.title===sel.title && t.impact===sel.impact && t.urgency===sel.urgency);
+      if(idx>-1){ tasks.splice(idx,1); saveTasks(tasks); }
+      localStorage.removeItem(SELECTED_KEY);
+      const modalEl=document.getElementById('confirmDoneModal');
+      try { const m=bootstrap.Modal.getInstance(modalEl); m&&m.hide(); } catch {}
+      document.getElementById('selectedFeedback').textContent='Marked done.';
+      setTimeout(()=> document.getElementById('selectedFeedback').textContent='',2000);
+      renderSelected(); renderDone();
+    });
+    document.getElementById('returnPool').addEventListener('click', ()=>{
+      const sel=loadSelected(); if(!sel) return;
+      const tasks=loadTasks(); tasks.push(sel); saveTasks(tasks);
+      localStorage.removeItem(SELECTED_KEY);
+      document.getElementById('selectedFeedback').textContent='Returned to pool.';
+      setTimeout(()=> document.getElementById('selectedFeedback').textContent='',2000);
+      renderSelected();
+    });
+    document.getElementById('year').textContent=new Date().getFullYear();
+    renderSelected(); renderDone();
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskSpin – Features</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body>
+  <!-- Navbar (shared) -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">TaskSpin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Input Tasks</a></li>
+          <li class="nav-item"><a class="nav-link active" href="features.html">Spinner</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Selected Task</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Basic Spinner Page -->
+  <section class="section-padding hero-gradient text-light">
+    <div class="container text-center">
+      <h1 class="fw-bold mb-3">Spin</h1>
+      <p class="mb-4">Randomly choose any task (equal chance).</p>
+      <div class="spinner-wrapper mb-3" id="wheelWrapper" aria-label="Task selection wheel">
+        <div class="spinner-pointer" aria-hidden="true"></div>
+        <div id="spinnerWheel" class="spinner-wheel" role="img" aria-label="Task spinner wheel">
+          <div class="wheel-center" id="spinnerCenterLabel" aria-live="polite" role="status">Ready</div>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <button id="spinBtn" class="btn btn-light">Spin</button>
+        <button class="btn btn-outline-light" onclick="location.href='index.html'">Tasks</button>
+        <button id="toSelected" class="btn btn-outline-light" onclick="location.href='contact.html'" disabled>Selected</button>
+      </div>
+      <div id="spinFeedback" class="mt-3 small" aria-live="polite" role="status"></div>
+    </div>
+  </section>
+
+  <section class="py-4 bg-light">
+    <div class="container">
+      <h2 class="fw-bold mb-3">Tasks</h2>
+      <ul id="taskSimpleList" class="list-group small"></ul>
+    </div>
+  </section>
+
+  <section class="py-4">
+    <div class="container">
+      <h2 class="fw-bold mb-3">Help & Tips</h2>
+      <div class="accordion" id="spinHelp">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h1">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true" aria-controls="c1">How selection works</button>
+          </h2>
+          <div id="c1" class="accordion-collapse collapse show" aria-labelledby="h1" data-bs-parent="#spinHelp">
+            <div class="accordion-body small">Currently every task has equal probability. You can adapt weighting by modifying the spin logic.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="false" aria-controls="c2">Why random?</button>
+          </h2>
+          <div id="c2" class="accordion-collapse collapse" aria-labelledby="h2" data-bs-parent="#spinHelp">
+            <div class="accordion-body small">Random selection helps avoid procrastination-by-prioritizing. Commit once selected.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3" aria-expanded="false" aria-controls="c3">Next steps</button>
+          </h2>
+          <div id="c3" class="accordion-collapse collapse" aria-labelledby="h3" data-bs-parent="#spinHelp">
+            <div class="accordion-body small">After selection use the Selected Task page to confirm completion or return it to the pool.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-bg pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <h5>TaskSpin</h5>
+          <p class="small">Spin to commit – reduce choice fatigue.</p>
+        </div>
+        <div class="col-md-3">
+          <h6>Flow</h6>
+          <ul class="list-unstyled small"><li>Input</li><li>Spin</li><li>Execute</li></ul>
+        </div>
+        <div class="col-md-3">
+          <h6>Pages</h6>
+          <ul class="list-unstyled small">
+            <li><a href="index.html">Input</a></li>
+            <li><a href="features.html">Spinner</a></li>
+            <li><a href="contact.html">Selected</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center mt-4 small">&copy; <span id="year"></span> TaskSpin</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    const LS_KEY='taskspin_tasks';
+    const SELECTED_KEY='taskspin_selected';
+    function loadTasks(){ try { return JSON.parse(localStorage.getItem(LS_KEY))||[];} catch {return [];} }
+    function saveSelected(obj){ localStorage.setItem(SELECTED_KEY, JSON.stringify(obj)); }
+    function renderList(){
+      const ul=document.getElementById('taskSimpleList');
+      const tasks=loadTasks();
+      ul.innerHTML='';
+      tasks.forEach(t=>{
+        const li=document.createElement('li');
+        li.className='list-group-item d-flex justify-content-between';
+        const weight=t.impact + t.urgency;
+        li.innerHTML=`<span>${t.title}</span><span class='small text-muted'>w:${weight}</span>`;
+        ul.appendChild(li);
+      });
+      document.getElementById('spinBtn').disabled = tasks.length===0;
+      buildWheel();
+    }
+
+    let segmentMeta=[]; // {mid, task}
+    function buildWheel(){
+      const wheel=document.getElementById('spinnerWheel');
+      if(!wheel) return;
+      const tasks=loadTasks();
+      wheel.style.transition='none';
+      wheel.style.transform='rotate(0deg)';
+      segmentMeta=[];
+      // Clear labels (keep center only)
+      [...wheel.querySelectorAll('.wheel-label')].forEach(el=> el.remove());
+      if(!tasks.length){ wheel.classList.add('spin-disabled'); return; } else { wheel.classList.remove('spin-disabled'); }
+      const total=tasks.reduce((acc,t)=> acc + t.impact + t.urgency,0) || 1;
+      let currentAngle=0;
+      const baseColors=['#e63946','#f3722c','#f9844a','#f9c74f','#90be6d','#43aa8b','#4d908e','#577590','#277da1','#2a9d8f'];
+      const gradientParts=[];
+      tasks.forEach((t,i)=>{
+        const weight=t.impact + t.urgency;
+        const span=(weight/total)*360;
+        const start=currentAngle;
+        const end=currentAngle + span;
+        const mid=start + span/2;
+        segmentMeta.push({mid, task:t});
+        // pick two adjacent base colors for a two-tone look
+        const c1 = baseColors[i % baseColors.length];
+        const c2 = baseColors[(i+1) % baseColors.length];
+        // create two stops per segment to create a multi-colored wedge (c1 -> c2)
+        gradientParts.push(`${c1} ${start}deg ${mid}deg`);
+        gradientParts.push(`${c2} ${mid}deg ${end}deg`);
+        // label
+        const lbl=document.createElement('div');
+        lbl.className='wheel-label';
+        lbl.textContent=t.title;
+        // Position label: rotate then translate outward
+        lbl.style.transform=`rotate(${mid}deg) translate(-50%, -50%) translateY(-140px) rotate(${-mid}deg)`;
+        wheel.appendChild(lbl);
+        currentAngle=end;
+      });
+      const gradient=`conic-gradient(${gradientParts.join(',')})`;
+      wheel.style.background=gradient;
+      // Restore transition for spins
+      setTimeout(()=> wheel.style.transition='transform 2.5s cubic-bezier(.22,.61,.36,1)',10);
+    }
+
+    function weightedPick(tasks){
+      const total=tasks.reduce((acc,t)=> acc + t.impact + t.urgency,0) || 1;
+      let r=Math.random()*total;
+      for(const t of tasks){
+        r -= (t.impact + t.urgency);
+        if(r<=0) return t;
+      }
+      return tasks[tasks.length-1];
+    }
+
+    function spin(){
+      const wheel=document.getElementById('spinnerWheel');
+      const center=document.getElementById('spinnerCenterLabel');
+      const tasks=loadTasks(); if(!tasks.length) return;
+      const picked=weightedPick(tasks);
+      // find picked meta mid angle
+      const meta=segmentMeta.find(m=> m.task.title===picked.title && m.task.impact===picked.impact && m.task.urgency===picked.urgency);
+      if(!meta){ return; }
+      center.textContent='Spinning...';
+      const baseRot=360*4; // full spins before landing
+      const targetRot=baseRot + (360 - meta.mid); // align mid to pointer (0deg)
+      wheel.style.transform=`rotate(${targetRot}deg)`;
+      saveSelected(picked);
+      document.getElementById('toSelected').disabled=false;
+      setTimeout(()=>{
+        center.textContent=picked.title;
+        document.getElementById('spinFeedback').textContent='Selected: '+picked.title;
+      },2500);
+    }
+    document.getElementById('spinBtn').addEventListener('click', spin);
+    document.getElementById('year').textContent=new Date().getFullYear();
+    renderList();
+    try { if(!localStorage.getItem(SELECTED_KEY)) document.getElementById('toSelected').disabled=true; } catch {}
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ renderList(); }} );
+  </script>
+</body>
+</html>

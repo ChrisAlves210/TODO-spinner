@@ -1,0 +1,35 @@
+
+:root { --ts-primary:#0d6efd; --ts-secondary:#072f5f; --ts-accent:#66b2ff; --ts-light:#f8f9fa; --ts-dark:#1c1f26; }
+
+:root {
+	--bs-primary: var(--ts-primary);
+	--bs-primary-rgb: 13,110,253;
+	--bs-secondary: var(--ts-secondary);
+	--bs-success: #198754;
+	--bs-info: #0dcaf0;
+	--bs-light: var(--ts-light);
+	--bs-dark: var(--ts-dark);
+}
+
+
+.btn-primary, .bg-primary {
+	background-color: var(--bs-primary) !important;
+	border-color: var(--bs-primary) !important;
+}
+.btn-primary:hover, .bg-primary:hover { background-color: color-mix(in srgb, var(--bs-primary) 80%, black 20%) !important; }
+.text-primary { color: var(--bs-primary) !important; }
+.hero-gradient { background: linear-gradient(135deg, var(--ts-primary) 0%, #3b82f6 50%, #a8d1ff 100%); }
+body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background: linear-gradient(180deg,#e8f1ff 0%, #f6fbff 100%); }
+.section-padding { padding: 3rem 0; }
+.footer-bg { background: var(--ts-secondary); color: var(--ts-light); }
+.footer-bg a { color: var(--ts-accent); text-decoration: none; }
+.footer-bg a:hover { text-decoration: underline; }
+ul.list-group.small li { font-size:.85rem; }
+
+
+.spinner-wrapper { position:relative; width:320px; margin:0 auto 1.5rem; }
+.spinner-wheel { width:320px; height:320px; border-radius:50%; position:relative; box-shadow:0 0 0 4px rgba(255,255,255,.2),0 8px 24px -4px rgba(0,0,0,.35); transition:transform 2.5s cubic-bezier(.22,.61,.36,1); background:#222; overflow:hidden; }
+.spinner-pointer { position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent; border-bottom:24px solid var(--ts-light); filter:drop-shadow(0 2px 4px rgba(0,0,0,.4)); z-index:5; }
+.wheel-label { position:absolute; top:50%; left:50%; transform-origin: center center; font-size:.65rem; font-weight:600; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.6); width:60px; text-align:center; }
+.wheel-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; color:#fff; backdrop-filter:blur(2px); }
+.spin-disabled { opacity:.5; pointer-events:none; }
