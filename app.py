@@ -1,0 +1,22 @@
+from flask import Flask, send_from_directory
+import os
+
+app = Flask(__name__, static_folder='.', static_url_path='')
+
+
+@app.route('/')
+def index():
+    # serve the static index.html from the project root
+    return send_from_directory('.', 'index.html')
+
+
+@app.route('/<path:filename>')
+def serve_file(filename):
+    # serve other static files
+    if os.path.exists(filename):
+        return send_from_directory('.', filename)
+    return ('Not found', 404)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8000)
