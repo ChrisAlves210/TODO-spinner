@@ -26,6 +26,18 @@ body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sa
 .footer-bg a:hover { text-decoration: underline; }
 ul.list-group.small li { font-size:.85rem; }
 
+/* Ensure hero text is white for contrast */
+.hero-gradient h1,
+.hero-gradient h2,
+.hero-gradient h3,
+.hero-gradient p,
+.hero-gradient label,
+.hero-gradient .card-title,
+.hero-gradient .card-text,
+.hero-gradient .lead,
+.hero-gradient .small { color:#fff; }
+.hero-gradient .btn-outline-light { color:#fff; border-color:#fff; }
+
 
 .spinner-wrapper { position:relative; width:320px; margin:0 auto 1.5rem; }
 .spinner-wheel { width:320px; height:320px; border-radius:50%; position:relative; box-shadow:0 0 0 4px rgba(255,255,255,.2),0 8px 24px -4px rgba(0,0,0,.35); transition:transform 2.5s cubic-bezier(.22,.61,.36,1); background:#222; overflow:hidden; }
